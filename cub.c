@@ -66,7 +66,6 @@ char **map_read(t_game *game)
 			all_line = ft_strjoin(all_line, line);
 		else
 			exit(write(2, "Error\n", 6) - 5);
-		printf("[%p] : [%s] \n", line, line);
 	}
 	str = ft_split(all_line, '\n');
 	free(line);

@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 10:54:51 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/02/12 22:20:38 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/02/12 22:23:41 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s2[j])
 		ptr[i++] = s2[j++];
 	ptr[i] = '\0';
-	if (s1)
-		free(s1);
+	free(s1);
 	free(s2);
 	s1 = NULL;
 	s2 = NULL;
