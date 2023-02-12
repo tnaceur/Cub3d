@@ -65,7 +65,8 @@ char **map_read(t_game *game)
 		else if (line[0] == '1' || line[0] == '0' || line[0] == ' ')
 			all_line = ft_strjoin(all_line, line);
 		else
-			printf("eoinfpm\n");
+			exit(write(2, "Error\n", 6) - 5);
+		printf("[%p] : [%s] \n", line, line);
 	}
 	str = ft_split(all_line, '\n');
 	free(line);
@@ -76,6 +77,9 @@ char **map_read(t_game *game)
 
 void	init_var(t_game *game, char *av)
 {
+	int	i;
+	int	j;
+
 	game->mlx = mlx_init();
 	game->fd = open(av, O_RDONLY);
 	game->map = map_read(game);
@@ -87,7 +91,6 @@ void	init_var(t_game *game, char *av)
 	game->width = ft_strlen(game->map[0]) * 40;
 	game->height = str_2d(game->map ) * 40;
 	game->win= mlx_new_window(game->mlx, game->width, game->height, "cub3d");
-	int i, j;
 	game->player = mlx_xpm_file_to_image(game->mlx, "p_right.xpm", &i, &j);
 }
 
@@ -124,8 +127,6 @@ void	draw_line(t_game *game, int color)
 	double	x;
 	double	y;
 
-	// mlx_put_image_to_window(game->mlx, game->win, game->player, game->p_y, game->p_x);
-	// draw_circle(game, game->p_y, game->p_x, 5, game->red);
 	for (int i = game->p_x; i < game->p_x + 5; i++)
 	{
 		for (int j = game->p_y; j < game->p_y + 5; j++)
