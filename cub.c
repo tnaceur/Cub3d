@@ -1,5 +1,4 @@
 #include "cub.h"
-#define PI 3.14159265359
 
 
 typedef struct s_game	{
@@ -92,11 +91,6 @@ void	init_var(t_game *game, char *av)
 	game->player = mlx_xpm_file_to_image(game->mlx, "p_right.xpm", &i, &j);
 }
 
-// void	init_win(t_game *game)
-// {
-
-// }
-
 int	map_name(char *av2)
 {
 	int		i;
@@ -130,7 +124,15 @@ void	draw_line(t_game *game, int color)
 	double	x;
 	double	y;
 
-	mlx_put_image_to_window(game->mlx, game->win, game->player, game->p_y, game->p_x);
+	// mlx_put_image_to_window(game->mlx, game->win, game->player, game->p_y, game->p_x);
+	// draw_circle(game, game->p_y, game->p_x, 5, game->red);
+	for (int i = game->p_x; i < game->p_x + 5; i++)
+	{
+		for (int j = game->p_y; j < game->p_y + 5; j++)
+		{
+			mlx_pixel_put(game->mlx, game->win, j, i, color);
+		}
+	}
 	x2 = game->p_x + cos(game->rot_angle) * 30;
 	y2 = game->p_y + sin(game->rot_angle) * 30;
 	dx = x2 - game->p_x;
@@ -159,44 +161,34 @@ int	key_press(int key, t_game *game)
 	{
 		draw_line(game, game->black);
 		game->dir = -1;
-		game->rot_angle += game->dir * (acos(-1) / 180);
+		game->rot_angle += game->dir * 6 * (acos(-1) / 180);
 	}
 	else if (key == 123)
 	{
 		draw_line(game, game->black);
 		game->dir = 1;
-		game->rot_angle += game->dir * (acos(-1) / 180);
+		game->rot_angle += game->dir * 6 * (acos(-1) / 180);
 	}
 	else if (key == 13)
 	{
-		int	n_x = floor((game->p_x + 2 * cos(game->rot_angle)));
-		int	n_y = floor((game->p_y + 2 * sin(game->rot_angle)));
+		int	n_x = floor((game->p_x + 4 * cos(game->rot_angle)));
+		int	n_y = floor((game->p_y + 4 * sin(game->rot_angle)));
 		if (game->map[n_x / 40][n_y / 40] != '1')
 		{
-			for (int i = game->p_x; i < game->p_x + 40; i++)
-			{
-				for (int j = game->p_y; j < game->p_y + 40; j++)
-					mlx_pixel_put(game->mlx, game->win, j, i, game->black);
-			}
 			draw_line(game, game->black);
-			game->p_x += 2.0 * cos(game->rot_angle);
-			game->p_y += 2.0 * sin(game->rot_angle);
+			game->p_x += 4.0 * cos(game->rot_angle);
+			game->p_y += 4.0 * sin(game->rot_angle);
 		}
 	}
 	else if (key == 1)
 	{
-		int	n_x = floor((game->p_x - 2 * cos(game->rot_angle)) );
-		int	n_y = floor((game->p_y - 2 * sin(game->rot_angle)));
+		int	n_x = floor((game->p_x - 4 * cos(game->rot_angle)) );
+		int	n_y = floor((game->p_y - 4 * sin(game->rot_angle)));
 		if (game->map[n_x / 40][n_y / 40] != '1')
 		{
-			for (int i = game->p_x; i < game->p_x + 40; i++)
-			{
-				for (int j = game->p_y; j < game->p_y + 40; j++)
-					mlx_pixel_put(game->mlx, game->win, j, i, game->black);
-			}
 			draw_line(game, game->black);
-			game->p_x += -2.0 * cos(game->rot_angle);
-			game->p_y += -2.0 * sin(game->rot_angle);
+			game->p_x += -4.0 * cos(game->rot_angle);
+			game->p_y += -4.0 * sin(game->rot_angle);
 		}
 	}
 	else if (key == 53)
