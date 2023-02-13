@@ -1,28 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/13 01:56:13 by tnaceur           #+#    #+#             */
+/*   Updated: 2023/02/13 08:20:30 by tnaceur          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub.h"
-
-
-typedef struct s_game	{
-	void	*mlx;
-	void	*win;
-	void	*player;
-	double	rot_angle;
-	double		dir;
-	double		p_x;
-	double		p_y;
-	int		width;
-	int		height;
-	int		red;
-	int		black;
-	int		white;
-	int		fd;
-	char	*NO;
-	char	*SO;
-	char	*WE;
-	char	*EA;
-	char	*F;
-	char	*C;
-	char	**map;
-}	t_game;
 
 int	str_2d(char **s)
 {
@@ -34,7 +22,7 @@ int	str_2d(char **s)
 	return (i);
 }
 
-char **map_read(t_game *game)
+char	**map_read(t_game *game)
 {
 	char	*all_line;
 	char	**str;
@@ -47,19 +35,19 @@ char **map_read(t_game *game)
 	{
 		line = get_next_line(game->fd);
 		if (line == NULL)
-			break;
+			break ;
 		if (line[0] == 'N' && line[1] == 'O')
-			game->NO = line;
+			game->no = line;
 		else if (line[0] == 'S' && line[1] == 'O')
-			game->SO = line;
+			game->so = line;
 		else if (line[0] == 'W' && line[1] == 'E')
-			game->WE = line;
+			game->we = line;
 		else if (line[0] == 'E' && line[1] == 'A')
-			game->EA = line;
+			game->ea = line;
 		else if (line[0] == 'F')
-			game->F = line;
+			game->f = line;
 		else if (line[0] == 'C')
-			game->C = line;
+			game->c = line;
 		else if (line[0] == '\n' || line[0] == '\0')
 			free(line);
 		else if (line[0] == '1' || line[0] == '0' || line[0] == ' ')
@@ -73,7 +61,6 @@ char **map_read(t_game *game)
 	return (str);
 }
 
-
 void	init_var(t_game *game, char *av)
 {
 	int	i;
@@ -84,12 +71,12 @@ void	init_var(t_game *game, char *av)
 	game->map = map_read(game);
 	if (game->map == NULL)
 		exit(0);
-	game->white = mlx_get_color_value(game->mlx, 16777215);
+	game->bl = mlx_get_color_value(game->mlx, 16777215);
 	game->red = mlx_get_color_value(game->mlx, 16711680);
-	game->black = mlx_get_color_value(game->mlx,0);
+	game->black = mlx_get_color_value(game->mlx, 0);
 	game->width = ft_strlen(game->map[0]) * 40;
-	game->height = str_2d(game->map ) * 40;
-	game->win= mlx_new_window(game->mlx, game->width, game->height, "cub3d");
+	game->height = str_2d(game->map) * 40;
+	game->win = mlx_new_window(game->mlx, game->width, game->height, "cub3d");
 	game->player = mlx_xpm_file_to_image(game->mlx, "p_right.xpm", &i, &j);
 }
 
@@ -115,48 +102,54 @@ int	map_name(char *av2)
 	return (0);
 }
 
-void	draw_line(t_game *game, int color)
+void	put_player(t_game *game, t_line *line, int color)
 {
-	int		x2;
-	int		y2;
-	double	dx;
-	double	dy;
-	double	steps;
-	double	xinc, yinc;
-	double	x;
-	double	y;
-
-	for (int i = game->p_x; i < game->p_x + 5; i++)
+	line->i = game->p_x;
+	while (line->i < game->p_x + 5)
 	{
-		for (int j = game->p_y; j < game->p_y + 5; j++)
-		{
-			mlx_pixel_put(game->mlx, game->win, j, i, color);
-		}
-	}
-	x2 = game->p_x + cos(game->rot_angle) * 30;
-	y2 = game->p_y + sin(game->rot_angle) * 30;
-	dx = x2 - game->p_x;
-	dy = y2 - game->p_y;
-	steps = fabs(dx) > fabs(dy) ? fabs(dx) : fabs(dy);
-	xinc = dx / steps;
-	yinc = dy / steps;
-	x = game->p_x;
-	y = game->p_y;
-	for (int i = 0; i <= steps; i++)
-	{
-		mlx_pixel_put(game->mlx, game->win, y, x, color);
-		x += xinc;
-		y += yinc;
+		line->j = game->p_y;
+		while (line->j < game->p_y + 5)
+			mlx_pixel_put(game->mlx, game->win, line->j++, line->i, color);
+		line->i++;
 	}
 }
 
-int ft()
+void	draw_line(t_game *game, int color)
+{
+	t_line	line;
+
+	put_player(game, &line, color);
+	line.x2 = game->p_x + cos(game->rot_angle) * 30;
+	line.y2 = game->p_y + sin(game->rot_angle) * 30;
+	line.dx = line.x2 - game->p_x;
+	line.dy = line.y2 - game->p_y;
+	if (fabs(line.dx) > fabs(line.dy))
+		line.steps = fabs(line.dx);
+	else
+		line.steps = fabs(line.dy);
+	line.xinc = line.dx / line.steps;
+	line.yinc = line.dy / line.steps;
+	line.x2 = game->p_x;
+	line.y2 = game->p_y;
+	line.i = 0;
+	while (++line.i <= line.steps)
+	{
+		mlx_pixel_put(game->mlx, game->win, line.y2, line.x2, color);
+		line.x2 += line.xinc;
+		line.y2 += line.yinc;
+	}
+}
+
+int	ft(void)
 {
 	exit(0);
 }
 
 int	key_press(int key, t_game *game)
 {
+	int	n_x;
+	int	n_y;
+
 	if (key == 124)
 	{
 		draw_line(game, game->black);
@@ -171,8 +164,8 @@ int	key_press(int key, t_game *game)
 	}
 	else if (key == 13)
 	{
-		int	n_x = floor((game->p_x + 4 * cos(game->rot_angle)));
-		int	n_y = floor((game->p_y + 4 * sin(game->rot_angle)));
+		n_x = floor((game->p_x + 4 * cos(game->rot_angle)));
+		n_y = floor((game->p_y + 4 * sin(game->rot_angle)));
 		if (game->map[n_x / 40][n_y / 40] != '1')
 		{
 			draw_line(game, game->black);
@@ -182,8 +175,8 @@ int	key_press(int key, t_game *game)
 	}
 	else if (key == 1)
 	{
-		int	n_x = floor((game->p_x - 4 * cos(game->rot_angle)) );
-		int	n_y = floor((game->p_y - 4 * sin(game->rot_angle)));
+		n_x = floor((game->p_x - 4 * cos(game->rot_angle)));
+		n_y = floor((game->p_y - 4 * sin(game->rot_angle)));
 		if (game->map[n_x / 40][n_y / 40] != '1')
 		{
 			draw_line(game, game->black);
@@ -204,42 +197,27 @@ int	render(t_game *game)
 
 void	draw_map(t_game *game)
 {
-	int i;
+	int	i;
 	int	j;
-	int	a;
-	int	b;
+	int	s;
+	int	c;
 
 	i = 0;
 	while (game->map[i])
 	{
 		j = 0;
-		a = i * 40;
 		while (game->map[i][j])
 		{
-			for (int s = 0; s < 40; s++)
-			{
-				b = j * 40;
-				for (int c = 0; c < 40; c++)
-				{
-					mlx_pixel_put(game->mlx, game->win, b, a, game->black);
-					b++;
-				}
-				a++;
-			}
-			a = i * 40;
 			if (game->map[i][j] == '1')
 			{
-				for (int s = 0; s < 40; s++)
+				s = i * 40;
+				while (s < (i * 40) + 40)
 				{
-					b = j * 40;
-					for (int c = 0; c < 40; c++)
-					{
-						mlx_pixel_put(game->mlx, game->win, b, a, game->white);
-						b++;
-					}
-					a++;
+					c = j * 40;
+					while (c < (j * 40) + 40)
+						mlx_pixel_put(game->mlx, game->win, c++, s, game->bl);
+					s++;
 				}
-				a = i * 40;
 			}
 			else if (game->map[i][j] == 'N' || game->map[i][j] == 'S'
 				|| game->map[i][j] == 'W' || game->map[i][j] == 'E')
