@@ -4,6 +4,7 @@ FLAGS = -Wall -Wextra -Werror -I /usr/X11/include -L /usr/X11/lib -l mlx -framew
 RM = rm -rf
 
 SRCS = cub.c\
+		init.c\
 		get_next_line.c\
 		libft/ft_atoi.c\
 		libft/ft_bzero.c\

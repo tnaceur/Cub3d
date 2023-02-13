@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:47:03 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/02/13 08:20:17 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/02/13 08:30:35 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,12 @@ typedef struct s_line {
 }	t_line;
 
 char	*get_next_line(int fd);
+char	**map_read(t_game *game);
+int		str_2d(char **s);
+int		map_name(char *av2);
+int		ft_exit(void);
+void	init_var(t_game *game, char *av);
+void	draw_line(t_game *game, int color);
+void	put_player(t_game *game, t_line *line, int color);
 
 #endif
