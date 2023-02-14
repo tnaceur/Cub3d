@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:47:03 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/02/13 08:30:35 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/02/14 15:30:28 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ typedef struct s_game {
 	void	*win;
 	void	*player;
 	double	rot_angle;
+	double	*ray_angle;
+	double	fov;
 	double	dir;
 	double	p_x;
 	double	p_y;
@@ -65,7 +67,7 @@ int		str_2d(char **s);
 int		map_name(char *av2);
 int		ft_exit(void);
 void	init_var(t_game *game, char *av);
-void	draw_line(t_game *game, int color);
-void	put_player(t_game *game, t_line *line, int color);
+void	draw_line(t_game *game, double angle, int color);
+void	put_player(t_game *game, int color);
 
 #endif

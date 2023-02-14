@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 08:24:42 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/02/13 08:31:53 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/02/14 15:32:08 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	init_var(t_game *game, char *av)
 	game->height = str_2d(game->map) * 40;
 	game->win = mlx_new_window(game->mlx, game->width, game->height, "cub3d");
 	game->player = mlx_xpm_file_to_image(game->mlx, "p_right.xpm", &i, &j);
+	game->fov = 60 * acos(-1) / 180;
+	game->ray_angle = NULL;
 }
 
 int	map_name(char *av2)
@@ -63,13 +65,12 @@ int	map_name(char *av2)
 	return (0);
 }
 
-void	draw_line(t_game *game, int color)
+void	draw_line(t_game *game, double angle, int color)
 {
 	t_line	line;
 
-	put_player(game, &line, color);
-	line.x2 = game->p_x + cos(game->rot_angle) * 30;
-	line.y2 = game->p_y + sin(game->rot_angle) * 30;
+	line.x2 = game->p_x + cos(angle) * 30;
+	line.y2 = game->p_y + sin(angle) * 30;
 	line.dx = line.x2 - game->p_x;
 	line.dy = line.y2 - game->p_y;
 	if (fabs(line.dx) > fabs(line.dy))
@@ -94,14 +95,17 @@ int	ft_exit(void)
 	exit(0);
 }
 
-void	put_player(t_game *game, t_line *line, int color)
+void	put_player(t_game *game, int color)
 {
-	line->i = game->p_x;
-	while (line->i < game->p_x + 5)
+	int	i;
+	int	j;
+
+	i = game->p_x;
+	while (i < game->p_x + 5)
 	{
-		line->j = game->p_y;
-		while (line->j < game->p_y + 5)
-			mlx_pixel_put(game->mlx, game->win, line->j++, line->i, color);
-		line->i++;
+		j = game->p_y;
+		while (j < game->p_y + 5)
+			mlx_pixel_put(game->mlx, game->win, j++, i, color);
+		i++;
 	}
 }
