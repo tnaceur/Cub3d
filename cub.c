@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:56:13 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/02/14 17:18:12 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/02/17 09:13:33 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,18 @@ char	**map_read(t_game *game)
 
 void	draw_rays(t_game *game, int color)
 {
-	int	i;
+	int		i;
+	double	ray;
 
+	ray = game->rot_angle - (game->fov / 2);
 	i = 0;
-	while (game->ray_angle && game->ray_angle[i] && i < 320)
+	while (i < game->width)
 	{
-		draw_line(game, game->ray_angle[i], color);
+		draw_line(game, ray, color);
+		ray += game->fov / game->width;
+		ray = fmod(ray, 2 * M_PI);
+		if (ray < 0)
+			ray += 2 * M_PI;
 		i++;
 	}
 }
@@ -70,17 +76,13 @@ int	key_press(int key, t_game *game)
 
 	if (key == 124)
 	{
-		// draw_line(game, game->rot_angle, game->black);
-		draw_rays(game, game->black);
 		game->dir = -1;
-		game->rot_angle += game->dir * 6 * (acos(-1) / 180);
+		game->rot_angle += game->dir * 6 * (M_PI / 180);
 	}
 	else if (key == 123)
 	{
-		// draw_line(game, game->rot_angle, game->black);
-		draw_rays(game, game->black);
 		game->dir = 1;
-		game->rot_angle += game->dir * 6 * (acos(-1) / 180);
+		game->rot_angle += game->dir * 6 * (M_PI / 180);
 	}
 	else if (key == 13)
 	{
@@ -88,9 +90,6 @@ int	key_press(int key, t_game *game)
 		n_y = floor((game->p_y + 4 * sin(game->rot_angle)));
 		if (game->map[n_x / 40][n_y / 40] != '1')
 		{
-			draw_rays(game, game->black);
-			// draw_line(game, game->rot_angle, game->black);
-			put_player(game, game->black);
 			game->p_x += 4.0 * cos(game->rot_angle);
 			game->p_y += 4.0 * sin(game->rot_angle);
 		}
@@ -101,12 +100,8 @@ int	key_press(int key, t_game *game)
 		n_y = floor((game->p_y - 4 * sin(game->rot_angle)));
 		if (game->map[n_x / 40][n_y / 40] != '1')
 		{
-			draw_rays(game, game->black);
-			// draw_line(game, game->rot_angle, game->black);
-			put_player(game, game->black);
 			game->p_x += -4.0 * cos(game->rot_angle);
 			game->p_y += -4.0 * sin(game->rot_angle);
-			put_player(game, game->red);
 		}
 	}
 	else if (key == 53)
@@ -114,63 +109,25 @@ int	key_press(int key, t_game *game)
 	return (0);
 }
 
-int	render(t_game *game)
+void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
 {
-	int	i;
-	double	ray;
+	char	*dst;
 
-	i = 0;
-	put_player(game, game->red);
-	// draw_line(game, game->rot_angle, game->red);
-	// draw_rays(game, game->red);
-	free(game->ray_angle);
-	game->ray_angle = malloc(sizeof(double) * 320);
-	ray = game->rot_angle - (game->fov / 2);
-	i = 0;
-	while (i < 320)
-	{
-		draw_line(game, ray, game->red);
-		game->ray_angle[i] = ray;
-		ray += game->fov / 320;
-		i++;
-	}
-	return (0);
+	dst = game->addr + (y * game->line_length + x * (game->bits_per_pixel / 8));
+	*(unsigned int *)dst = color;
 }
 
-void	draw_map(t_game *game)
+int	render(t_game *game)
 {
-	int	i;
-	int	j;
-	int	s;
-	int	c;
-
-	i = 0;
-	while (game->map[i])
-	{
-		j = 0;
-		while (game->map[i][j])
-		{
-			if (game->map[i][j] == '1')
-			{
-				s = i * 40;
-				while (s < (i * 40) + 40)
-				{
-					c = j * 40;
-					while (c < (j * 40) + 40)
-						mlx_pixel_put(game->mlx, game->win, c++, s, game->bl);
-					s++;
-				}
-			}
-			else if (game->map[i][j] == 'N' || game->map[i][j] == 'S'
-				|| game->map[i][j] == 'W' || game->map[i][j] == 'E')
-			{
-				game->p_x = i * 40;
-				game->p_y = j * 40;
-			}
-			j++;
-		}
-		i++;
-	}
+	mlx_destroy_image(game->mlx, game->img);
+	game->img = mlx_new_image(game->mlx, game->width, game->height);
+	game->addr = mlx_get_data_addr(game->img, &game->bits_per_pixel,
+			&game->line_length, &game->endian);
+	draw_map(game);
+	put_player(game, game->red);
+	draw_rays(game, game->red);
+	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
+	return (0);
 }
 
 int	main(int ac, char **av)
@@ -181,16 +138,16 @@ int	main(int ac, char **av)
 		exit(write(2, "Error\n", 6) - 5);
 	init_var(&game, av[1]);
 	if (game.map[(int)(game.p_x / 40)][(int)(game.p_y / 40)] == 'N')
-		game.rot_angle = acos(-1);
+		game.rot_angle = M_PI;
 	else if (game.map[(int)(game.p_x / 40)][(int)(game.p_y / 40)] == 'E')
-		game.rot_angle = acos(-1) / 2;
+		game.rot_angle = M_PI / 2;
 	else if (game.map[(int)(game.p_x / 40)][(int)(game.p_y / 40)] == 'S')
-		game.rot_angle = 2 * acos(-1);
+		game.rot_angle = 2 * M_PI;
 	else if (game.map[(int)(game.p_x / 40)][(int)(game.p_y / 40)] == 'W')
-		game.rot_angle = 3 * acos(-1) / 2;
+		game.rot_angle = 3 * M_PI / 2;
 	draw_map(&game);
-	mlx_loop_hook(game.mlx, &render, &game);
-	mlx_hook(game.win, 17, 0, &ft_exit, NULL);
-	mlx_hook(game.win, 2, 0, &key_press, &game);
+	mlx_hook(game.win, 17, 0, ft_exit, NULL);
+	mlx_hook(game.win, 2, 0, key_press, &game);
+	mlx_loop_hook(game.mlx, render, &game);
 	mlx_loop(game.mlx);
 }

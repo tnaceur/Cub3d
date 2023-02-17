@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 08:24:42 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/02/14 15:32:08 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/02/17 08:57:55 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,12 @@ void	init_var(t_game *game, char *av)
 	game->height = str_2d(game->map) * 40;
 	game->win = mlx_new_window(game->mlx, game->width, game->height, "cub3d");
 	game->player = mlx_xpm_file_to_image(game->mlx, "p_right.xpm", &i, &j);
-	game->fov = 60 * acos(-1) / 180;
-	game->ray_angle = NULL;
+	game->fov = 60 * (M_PI / 180);
+	game->p_x = 0;
+	game->p_y = 0;
+	game->img = mlx_new_image(game->mlx, game->width, game->height);
+	game->addr = mlx_get_data_addr(game->img, &game->bits_per_pixel,
+			&game->line_length, &game->endian);
 }
 
 int	map_name(char *av2)
@@ -69,8 +73,8 @@ void	draw_line(t_game *game, double angle, int color)
 {
 	t_line	line;
 
-	line.x2 = game->p_x + cos(angle) * 30;
-	line.y2 = game->p_y + sin(angle) * 30;
+	line.x2 = game->p_x + cos(angle) * INT_MAX;
+	line.y2 = game->p_y + sin(angle) * INT_MAX;
 	line.dx = line.x2 - game->p_x;
 	line.dy = line.y2 - game->p_y;
 	if (fabs(line.dx) > fabs(line.dy))
@@ -84,7 +88,10 @@ void	draw_line(t_game *game, double angle, int color)
 	line.i = 0;
 	while (++line.i <= line.steps)
 	{
-		mlx_pixel_put(game->mlx, game->win, line.y2, line.x2, color);
+		if (game->map[(int)floor(line.x2 / 40)]
+			[(int)floor(line.y2 / 40)] == '1')
+			break ;
+		my_mlx_pixel_put(game, round(line.y2), round(line.x2), color);
 		line.x2 += line.xinc;
 		line.y2 += line.yinc;
 	}
@@ -97,15 +104,15 @@ int	ft_exit(void)
 
 void	put_player(t_game *game, int color)
 {
-	int	i;
-	int	j;
+	double	i;
+	double	j;
 
 	i = game->p_x;
 	while (i < game->p_x + 5)
 	{
 		j = game->p_y;
 		while (j < game->p_y + 5)
-			mlx_pixel_put(game->mlx, game->win, j++, i, color);
+			my_mlx_pixel_put(game, j++, i, color);
 		i++;
 	}
 }

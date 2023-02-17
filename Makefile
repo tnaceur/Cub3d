@@ -2,28 +2,12 @@ NAME = cub3d
 CC = gcc
 FLAGS = -Wall -Wextra -Werror -I /usr/X11/include -L /usr/X11/lib -l mlx -framework OpenGL -framework AppKit
 RM = rm -rf
+LIBFT = libft/libft.a
 
 SRCS = cub.c\
 		init.c\
+		draw.c\
 		get_next_line.c\
-		libft/ft_atoi.c\
-		libft/ft_bzero.c\
-		libft/ft_calloc.c\
-		libft/ft_isalnum.c\
-		libft/ft_isalpha.c\
-		libft/ft_isdigit.c\
-		libft/ft_isspace.c\
-		libft/ft_itoa.c\
-		libft/ft_putendl_fd.c\
-		libft/ft_putstr_fd.c\
-		libft/ft_split.c\
-		libft/ft_strchr.c\
-		libft/ft_strcmp.c\
-		libft/ft_strdup.c\
-		libft/ft_strjoin.c\
-		libft/ft_strlcpy.c\
-		libft/ft_strlen.c\
-		libft/ft_strncmp.c\
 
 
 OBJS = $(SRCS:%.c=%.o)
@@ -33,12 +17,18 @@ OBJS = $(SRCS:%.c=%.o)
 
 all : $(NAME)
 
-$(NAME): $(OBJS)
+$(LIBFT) :
+			make -C libft
+
+$(NAME): $(OBJS) $(LIBFT)
 	$(CC)  $(FLAGS) $(LIBFT) $(OBJS)  -o $(NAME)
 
 
 clean :
+		make clean -C libft
 		$(RM) $(OBJS)
 fclean : clean
+		make fclean -C libft
 		$(RM) $(NAME)
 re	: fclean all
+	 make re -C libft
