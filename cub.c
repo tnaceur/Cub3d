@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:56:13 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/02/26 08:04:38 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/02/28 00:24:38 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	draw_rays(t_game *game, int color)
 		corr_dst = game->dst * cos(ray - game->rot_angle);
 		dst_proj_wall = (WIDTH / 2) / tan(game->fov / 2);
 		wall_high = (40 / corr_dst) * dst_proj_wall;
-		d_wall_3d(game, (HEIGHT / 2) - wall_high / 2, i, 1, wall_high);
+		d_wall_3d(game, (HEIGHT / 2) - wall_high / 2, i, wall_high);
 		ray += game->fov / WIDTH;
 		i++;
 	}
@@ -78,9 +78,8 @@ void	draw_rays(t_game *game, int color)
 
 int	key_press(int key, t_game *game)
 {
-	int	n_x;
-	int	n_y;
-
+	move_w_s(key, game, 0, 0);
+	move_a_d(key, game, 0, 0);
 	if (key == KEY_LEFT)
 	{
 		game->dir = -1;
@@ -91,76 +90,9 @@ int	key_press(int key, t_game *game)
 		game->dir = 1;
 		game->rot_angle += game->dir * 6 * (M_PI / 180);
 	}
-	else if (key == KEY_W)
-	{
-		n_x = floor((game->p_x + 4 * cos(game->rot_angle)));
-		n_y = floor((game->p_y + 4 * sin(game->rot_angle)));
-		if (game->map[n_x / 40] && game->map[n_x / 40][n_y / 40] != '1')
-		{
-			game->p_x += 4.0 * cos(game->rot_angle);
-			game->p_y += 4.0 * sin(game->rot_angle);
-		}
-	}
-	else if (key == KEY_S)
-	{
-		n_x = floor((game->p_x - 4 * cos(game->rot_angle)));
-		n_y = floor((game->p_y - 4 * sin(game->rot_angle)));
-		if (game->map[n_x / 40] && game->map[n_x / 40][n_y / 40] != '1')
-		{
-			game->p_x += -4.0 * cos(game->rot_angle);
-			game->p_y += -4.0 * sin(game->rot_angle);
-		}
-	}
-	else if (key == KEY_A)
-	{
-		n_x = floor(game->p_x + 4 * sin(game->rot_angle));
-		n_y = floor(game->p_y - 4 * cos(game->rot_angle));
-		if (game->map[n_x / 40] && game->map[n_x / 40][n_y / 40] != '1')
-		{
-			game->p_x += +4.0 * sin(game->rot_angle);
-			game->p_y += -4.0 * cos(game->rot_angle);
-		}
-	}
-	else if (key == KEY_D)
-	{
-		n_x = floor(game->p_x - 4 * sin(game->rot_angle));
-		n_y = floor(game->p_y + 4 * cos(game->rot_angle));
-		if (game->map[n_x / 40] && game->map[n_x / 40][n_y / 40] != '1')
-		{
-			game->p_x += -4.0 * sin(game->rot_angle);
-			game->p_y += +4.0 * cos(game->rot_angle);
-		}
-	}
 	else if (key == 53)
 		exit(0);
 	return (0);
-}
-
-void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
-{
-	char	*dst;
-
-	if (x > WIDTH || y > HEIGHT || y < 0 || x < 0)
-		return ;
-	dst = game->addr + (y * game->line_length + x * (game->bits_per_pixel / 8));
-	*(unsigned int *)dst = color;
-}
-
-void	set_color(t_game *game)
-{
-	int	i;
-	int	color;
-	int	j;
-
-	i = 0;
-	color = mlx_get_color_value(game->mlx, 1991935);
-	while (i < WIDTH)
-	{
-		j = 0;
-		while (j < HEIGHT)
-			my_mlx_pixel_put(game, i, j++, color);
-		i++;
-	}
 }
 
 int	render(t_game *game)

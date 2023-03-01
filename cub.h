@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:47:03 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/02/26 08:04:16 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/02/28 00:25:28 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ typedef struct s_game {
 	double	p_x;
 	double	p_y;
 	double	dst;
+	int		n_x;
+	int		n_y;
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
@@ -82,6 +84,8 @@ void	draw_map(t_game *game);
 void	put_player(t_game *game, int color);
 void	my_mlx_pixel_put(t_game *game, int x, int y, int color);
 double	distance(t_game *game, double x1, double y1);
-void	d_wall_3d(t_game *game, double x, double y, double width, double height);
+void	d_wall_3d(t_game *game, double x, double y, double height);
+void	move_w_s(int key, t_game *game, int n_x, int n_y);
+void	move_a_d(int key, t_game *game, int n_x, int n_y);
 
 #endif

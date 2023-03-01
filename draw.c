@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 09:13:46 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/02/26 08:03:26 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/02/27 23:57:41 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,6 @@ void	draw_line(t_game *game, double angle, int color, int tall)
 	while (++line.i <= line.steps && game->map[(int)floor(line.x2 / 40)]
 		&& game->map[(int)floor(line.x2 / 40)][(int)floor(line.y2 / 40)] != '1')
 	{
-		if (line.y2 < 0 || line.x2 < 0)
-			break ;
 		my_mlx_pixel_put(game, line.y2 * 0.1,
 			line.x2 * 0.1, color);
 		line.x2 += line.xinc;
@@ -88,18 +86,20 @@ void	draw_line(t_game *game, double angle, int color, int tall)
 	game->dst = distance(game, line.x2, line.y2);
 }
 
-void	d_wall_3d(t_game *game, double x, double y, double width, double height)
+void	d_wall_3d(t_game *game, double x, double y, double w_height)
 {
 	double	i;
 	double	j;
+	double	w_width;
 	int		color;
 
 	color = mlx_get_color_value(game->mlx, 13159935);
+	w_width = 1;
 	i = x;
-	while (i < x + height)
+	while (i < x + w_height)
 	{
 		j = y;
-		while (j < y + width)
+		while (j < y + w_width)
 		{
 			if (j > WIDTH || i > HEIGHT
 				|| j < 0 || i < 0)
