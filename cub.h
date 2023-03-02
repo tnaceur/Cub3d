@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:47:03 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/02/28 00:25:28 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/02 10:04:45 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,6 @@ double	distance(t_game *game, double x1, double y1);
 void	d_wall_3d(t_game *game, double x, double y, double height);
 void	move_w_s(int key, t_game *game, int n_x, int n_y);
 void	move_a_d(int key, t_game *game, int n_x, int n_y);
+int		wall_att(t_game *game, double x2, double y2);
 
 #endif

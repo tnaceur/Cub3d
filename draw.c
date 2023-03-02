@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 09:13:46 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/02/27 23:57:41 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/02 10:03:19 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,26 @@ void	draw_map(t_game *game)
 	}
 }
 
+int	wall_att(t_game *game, double x2, double y2)
+{
+	int	x;
+	int	y;
+
+	x = floor(x2 / 40);
+	y = floor(y2 / 40);
+	if (game->map[x] && game->map[x][y] == '1')
+		return (0);
+	x = floor((x2 + 1) / 40);
+	y = floor(y2 / 40);
+	if (game->map[x] && game->map[x][y] == '1')
+		return (0);
+	x = floor(x2 / 40);
+	y = floor((y2 + 1) / 40);
+	if (game->map[x] && game->map[x][y] == '1')
+		return (0);
+	return (1);
+}
+
 void	draw_line(t_game *game, double angle, int color, int tall)
 {
 	t_line	line;
@@ -75,8 +95,7 @@ void	draw_line(t_game *game, double angle, int color, int tall)
 	line.x2 = game->p_x;
 	line.y2 = game->p_y;
 	line.i = 0;
-	while (++line.i <= line.steps && game->map[(int)floor(line.x2 / 40)]
-		&& game->map[(int)floor(line.x2 / 40)][(int)floor(line.y2 / 40)] != '1')
+	while (++line.i <= line.steps && wall_att(game, line.x2, line.y2))
 	{
 		my_mlx_pixel_put(game, line.y2 * 0.1,
 			line.x2 * 0.1, color);
