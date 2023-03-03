@@ -6,12 +6,11 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 09:13:46 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/03 16:30:48 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/03 23:02:48 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub.h"
-
 
 void	d_wall_2d(t_game *game, int x, int y, int color)
 {
@@ -118,8 +117,8 @@ int	player_pos(t_game *game, double x2, double y2)
 void	draw_line(t_game *game, double angle, int color, int tall)
 {
 	t_line	line;
-	float x_step;
-	float y_step;
+	double	x_step;
+	double	y_step;
 
 	line.x2 = game->p_x;
 	line.y2 = game->p_y;
@@ -160,16 +159,17 @@ void	d_wall_3d(t_game *game, double x, double y, double w_height)
 	double	j;
 	int		a;
 	int		b;
-	double	w_width;
 	int		color;
 
 	a = 0;
 	b = 0;
 	color = 0xD2DCFF;
-	while (a < x)
+	while (x >= 0 && a < HEIGHT && a < x)
 	{
 		b = y;
-		while (b < y + 1)
+		if (a > HEIGHT)
+			break ;
+		while (b < WIDTH && b < y + 1)
 		{
 			my_mlx_pixel_put(game, b, a, color);
 			b++;
@@ -184,30 +184,36 @@ void	d_wall_3d(t_game *game, double x, double y, double w_height)
 		color = 0xffff00;
 	else if (game->face == 4)
 		color = 0x0000ff;
-	w_width = 1;
 	i = x;
-	while (i < x + w_height)
+	if (i < 0)
+		i = 0;
+	while (i < HEIGHT && i < x + w_height)
 	{
 		j = y;
-		while (j < y + w_width)
+		if (i > HEIGHT)
+			break ;
+		while (j < WIDTH && j < y + 1)
 		{
-			if (j > WIDTH || i > HEIGHT
-				|| j < 0 || i < 0)
+			if (my_mlx_pixel_put(game, j, i, color))
+				j++;
+			else
 				break ;
-			my_mlx_pixel_put(game, j, i, color);
-			j++;
 		}
 		i++;
 	}
 	color = 0xffffff;
 	a = x + w_height;
-	while (a < HEIGHT)
+	while (a > 0 && a < HEIGHT)
 	{
 		b = y;
-		while (b < y + 1)
+		if (a > HEIGHT)
+			break ;
+		while (b < WIDTH && b < y + 1)
 		{
-			my_mlx_pixel_put(game, b, a, color);
-			b++;
+			if (my_mlx_pixel_put(game, b, a, color))
+				b++ ;
+			else
+				break ;
 		}
 		a++;
 	}

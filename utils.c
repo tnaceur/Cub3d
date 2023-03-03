@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:22:26 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/03 15:09:09 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/03 18:59:04 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,15 @@ double	distance(t_game *game, double x1, double y1)
 	return (sqrt(pow(x1 - game->p_x, 2) + pow(y1 - game->p_y, 2)));
 }
 
-void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
+int	my_mlx_pixel_put(t_game *game, int x, int y, int color)
 {
 	char	*dst;
 
-	if (x > WIDTH || y > HEIGHT || y < 0 || x < 0)
-		return ;
+	if (x >= WIDTH || y >= HEIGHT || y < 0 || x < 0)
+		return (0);
 	dst = game->addr + (y * game->line_length + x * (game->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
+	return (1);
 }
 
 void	set_color(t_game *game)
