@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 08:24:42 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/02/26 08:04:10 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/03 15:48:10 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	init_var(t_game *game, char *av)
 	game->map = map_read(game);
 	if (game->map == NULL)
 		exit(0);
+	game->hieght = str_2d(game->map);
 	game->bl = mlx_get_color_value(game->mlx, 16777215);
 	game->red = mlx_get_color_value(game->mlx, 16711680);
 	game->black = mlx_get_color_value(game->mlx, 0);

@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:56:13 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/02 10:04:25 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/03 09:55:14 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,20 @@ void	draw_rays(t_game *game, int color)
 	}
 }
 
+int	render(t_game *game)
+{
+	mlx_destroy_image(game->mlx, game->img);
+	game->img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
+	game->addr = mlx_get_data_addr(game->img, &game->bits_per_pixel,
+			&game->line_length, &game->endian);
+	draw_rays(game, game->red);
+	put_player(game, 65380);
+	draw_line(game, game->rot_angle, 65380, 100);
+	draw_map(game);
+	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
+	return (0);
+}
+
 int	key_press(int key, t_game *game)
 {
 	move_w_s(key, game, 0, 0);
@@ -92,20 +106,7 @@ int	key_press(int key, t_game *game)
 	}
 	else if (key == 53)
 		exit(0);
-	return (0);
-}
-
-int	render(t_game *game)
-{
-	mlx_destroy_image(game->mlx, game->img);
-	game->img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
-	game->addr = mlx_get_data_addr(game->img, &game->bits_per_pixel,
-			&game->line_length, &game->endian);
-	draw_rays(game, game->red);
-	put_player(game, 65380);
-	draw_line(game, game->rot_angle, 65380, 100);
-	draw_map(game);
-	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
+	render(game);
 	return (0);
 }
 
@@ -126,7 +127,7 @@ int	main(int ac, char **av)
 	else if (game.map[(int)(game.p_x / 40)][(int)(game.p_y / 40)] == 'W')
 		game.rot_angle = 3 * M_PI / 2;
 	mlx_hook(game.win, 17, 0, ft_exit, NULL);
+	render(&game);
 	mlx_hook(game.win, 2, 0, key_press, &game);
-	mlx_loop_hook(game.mlx, render, &game);
 	mlx_loop(game.mlx);
 }

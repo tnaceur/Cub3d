@@ -6,11 +6,12 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 09:13:46 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/02 10:03:19 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/03 16:30:48 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub.h"
+
 
 void	d_wall_2d(t_game *game, int x, int y, int color)
 {
@@ -65,15 +66,51 @@ int	wall_att(t_game *game, double x2, double y2)
 
 	x = floor(x2 / 40);
 	y = floor(y2 / 40);
-	if (game->map[x] && game->map[x][y] == '1')
-		return (0);
+	if (x > 0 && y > 0 && game->map[x] && game->map[x][y] != '1')
+		return (1);
 	x = floor((x2 + 1) / 40);
 	y = floor(y2 / 40);
-	if (game->map[x] && game->map[x][y] == '1')
+	if (x >= 0 && y >= 0 && game->map[x] && game->map[x][y] == '1')
 		return (0);
 	x = floor(x2 / 40);
 	y = floor((y2 + 1) / 40);
-	if (game->map[x] && game->map[x][y] == '1')
+	if (x >= 0 && y >= 0 && game->map[x] && game->map[x][y] == '1')
+		return (0);
+	x = floor((x2 - 1) / 40);
+	y = floor(y2 / 40);
+	if (x >= 0 && y >= 0 && game->map[x] && game->map[x][y] == '1')
+		return (0);
+	x = floor(x2 / 40);
+	y = floor((y2 - 1) / 40);
+	if (x >= 0 && y >= 0 && game->map[x] && game->map[x][y] == '1')
+		return (0);
+	return (0);
+}
+
+int	player_pos(t_game *game, double x2, double y2)
+{
+	int	x;
+	int	y;
+
+	x = floor(x2 / 40);
+	y = floor(y2 / 40);
+	if (x >= 0 && y >= 0 && game->map[x] && game->map[x][y] == '1')
+		return (0);
+	x = floor((x2 + 1) / 40);
+	y = floor(y2 / 40);
+	if (x >= 0 && y >= 0 && game->map[x] && game->map[x][y] == '1')
+		return (0);
+	x = floor(x2 / 40);
+	y = floor((y2 + 1) / 40);
+	if (x >= 0 && y >= 0 && game->map[x] && game->map[x][y] == '1')
+		return (0);
+	x = floor((x2 - 1) / 40);
+	y = floor(y2 / 40);
+	if (x >= 0 && y >= 0 && game->map[x] && game->map[x][y] == '1')
+		return (0);
+	x = floor(x2 / 40);
+	y = floor((y2 - 1) / 40);
+	if (x >= 0 && y >= 0 && game->map[x] && game->map[x][y] == '1')
 		return (0);
 	return (1);
 }
@@ -81,26 +118,38 @@ int	wall_att(t_game *game, double x2, double y2)
 void	draw_line(t_game *game, double angle, int color, int tall)
 {
 	t_line	line;
+	float x_step;
+	float y_step;
 
-	line.x2 = game->p_x + cos(angle) * tall;
-	line.y2 = game->p_y + sin(angle) * tall;
-	line.dx = line.x2 - game->p_x;
-	line.dy = line.y2 - game->p_y;
-	if (fabs(line.dx) > fabs(line.dy))
-		line.steps = fabs(line.dx);
-	else
-		line.steps = fabs(line.dy);
-	line.xinc = line.dx / line.steps;
-	line.yinc = line.dy / line.steps;
 	line.x2 = game->p_x;
 	line.y2 = game->p_y;
-	line.i = 0;
-	while (++line.i <= line.steps && wall_att(game, line.x2, line.y2))
+	(void)tall;
+	x_step = cos(angle);
+	y_step = sin(angle);
+	while (wall_att(game, line.x2, line.y2))
 	{
 		my_mlx_pixel_put(game, line.y2 * 0.1,
 			line.x2 * 0.1, color);
-		line.x2 += line.xinc;
-		line.y2 += line.yinc;
+		if (!wall_att(game, line.x2 + x_step, line.y2))
+		{
+			line.x2 += x_step;
+			if (x_step > 0)
+				game->face = 1;
+			else
+				game->face = 2;
+			break ;
+		}
+		if (!wall_att(game, line.x2, line.y2 + y_step))
+		{
+			line.y2 += y_step;
+			if (y_step > 0)
+				game->face = 3;
+			else
+				game->face = 4;
+			break ;
+		}
+		line.x2 += x_step;
+		line.y2 += y_step;
 	}
 	game->dst = distance(game, line.x2, line.y2);
 }
@@ -109,10 +158,32 @@ void	d_wall_3d(t_game *game, double x, double y, double w_height)
 {
 	double	i;
 	double	j;
+	int		a;
+	int		b;
 	double	w_width;
 	int		color;
 
-	color = mlx_get_color_value(game->mlx, 13159935);
+	a = 0;
+	b = 0;
+	color = 0xD2DCFF;
+	while (a < x)
+	{
+		b = y;
+		while (b < y + 1)
+		{
+			my_mlx_pixel_put(game, b, a, color);
+			b++;
+		}
+		a++;
+	}
+	if (game->face == 1)
+		color = 0xff0000;
+	else if (game->face == 2)
+		color = 0x00ffff;
+	else if (game->face == 3)
+		color = 0xffff00;
+	else if (game->face == 4)
+		color = 0x0000ff;
 	w_width = 1;
 	i = x;
 	while (i < x + w_height)
@@ -127,5 +198,17 @@ void	d_wall_3d(t_game *game, double x, double y, double w_height)
 			j++;
 		}
 		i++;
+	}
+	color = 0xffffff;
+	a = x + w_height;
+	while (a < HEIGHT)
+	{
+		b = y;
+		while (b < y + 1)
+		{
+			my_mlx_pixel_put(game, b, a, color);
+			b++;
+		}
+		a++;
 	}
 }

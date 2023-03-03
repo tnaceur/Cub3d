@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:47:03 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/02 10:04:45 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/03 15:48:38 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_game {
 	double	p_x;
 	double	p_y;
 	double	dst;
+	double	ray;
 	int		n_x;
 	int		n_y;
 	int		bits_per_pixel;
@@ -51,6 +52,7 @@ typedef struct s_game {
 	int		black;
 	int		bl;
 	int		fd;
+	int		hieght;
 	char	*no;
 	char	*so;
 	char	*we;
@@ -59,11 +61,13 @@ typedef struct s_game {
 	char	*c;
 	char	*addr;
 	char	**map;
+	int 	face;
 }	t_game;
 
 typedef struct s_line {
 	double	x2;
 	double	y2;
+	int		face;
 	double	dx;
 	double	dy;
 	double	steps;
@@ -88,5 +92,6 @@ void	d_wall_3d(t_game *game, double x, double y, double height);
 void	move_w_s(int key, t_game *game, int n_x, int n_y);
 void	move_a_d(int key, t_game *game, int n_x, int n_y);
 int		wall_att(t_game *game, double x2, double y2);
+int		player_pos(t_game *game, double x2, double y2);
 
 #endif

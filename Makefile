@@ -1,6 +1,6 @@
 NAME = cub3d
 CC = gcc
-FLAGS = -Wall -Wextra -Werror -I /usr/X11/include -L /usr/X11/lib -l mlx -framework OpenGL -framework AppKit #-g -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -I /usr/X11/include -L /usr/X11/lib -l mlx -framework OpenGL -framework AppKit -g -fsanitize=address
 RM = rm -rf
 LIBFT = libft/libft.a
 

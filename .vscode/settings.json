@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "cub.h": "c",
-        "cub3d.h": "c"
+        "cub3d.h": "c",
+        "complex": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
