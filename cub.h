@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:47:03 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/03 18:58:43 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/04 12:43:58 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,18 @@
 # include <stdlib.h>
 # include <limits.h>
 
+typedef struct	s_img {
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+    int	    width;
+    int     height;
+}				t_img;
+
 typedef struct s_game {
+	t_img	texture;
 	void	*mlx;
 	void	*win;
 	void	*img;

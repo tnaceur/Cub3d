@@ -1,7 +1,7 @@
 # include <mlx.h>
 # include <stdio.h>
 # include <stdlib.h>
-
+#include <math.h>
 typedef struct	s_data {
 	void	*img;
 	char	*addr;
@@ -25,7 +25,7 @@ int get_color(t_data *tswira, int y, int x)
 {
     int *color;
 
-    color = (int *) (tswira->addr + (y * tswira->line_length + x * (tswira->bits_per_pixel / 8)));
+    color = (int *) (tswira->addr + (y1 * tswira->line_length + x1 * (tswira->bits_per_pixel / 8)));
     return (*color);
 }
 
@@ -57,7 +57,6 @@ int main(void)
         }
         yy += (double) tswira.height / 500;
     }
-    // my_mlx_pixel_put(&img, 5, 5, 0x00FF0000);
 	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 	mlx_loop(mlx);
 

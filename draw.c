@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 09:13:46 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/04 11:07:39 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/04 13:07:53 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ void	draw_line(t_game *game, double angle, int color, int tall)
 			line.x2 * 0.1, color);
 		if (!wall_att(game, line.x2 + x_step, line.y2))
 		{
-			// line.x2 += x_step;
+			line.x2 += x_step;
 			if (x_step > 0)
 				game->face = 1;
 			else
@@ -153,7 +153,7 @@ void	draw_line(t_game *game, double angle, int color, int tall)
 		}
 		if (!wall_att(game, line.x2, line.y2 + y_step))
 		{
-			// line.y2 += y_step;
+			line.y2 += y_step;
 			if (y_step > 0)
 				game->face = 3;
 			else
