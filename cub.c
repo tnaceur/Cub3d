@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:56:13 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/05 15:06:04 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/05 16:19:35 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	draw_rays(t_game *game, int color)
 int	render(t_game *game)
 {
 	mlx_destroy_image(game->mlx, game->img);
+	mlx_clear_window(game->mlx, game->win);
 	game->img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
 	game->addr = mlx_get_data_addr(game->img, &game->bits_per_pixel,
 			&game->line_length, &game->endian);
