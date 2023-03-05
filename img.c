@@ -20,12 +20,11 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-
 int get_color(t_data *tswira, int y, int x)
 {
     int *color;
 
-    color = (int *) (tswira->addr + (y1 * tswira->line_length + x1 * (tswira->bits_per_pixel / 8)));
+    color = (int *) (tswira->addr + (y * tswira->line_length + x * (tswira->bits_per_pixel / 8)));
     return (*color);
 }
 
@@ -44,7 +43,6 @@ int main(void)
     tswira.img = mlx_xpm_file_to_image(mlx, "zelij.xpm", &tswira.width, &tswira.height);
     tswira.addr = mlx_get_data_addr(tswira.img, &tswira.bits_per_pixel, &tswira.line_length,
 								&tswira.endian);
-
     double xx = 0;
     double yy = 0;
     for (int y = 0; y < 500; y++)

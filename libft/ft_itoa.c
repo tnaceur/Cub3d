@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnaceur <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 14:31:23 by tnaceur           #+#    #+#             */
-/*   Updated: 2021/11/18 09:39:40 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/05 14:58:51 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "libft.h"
 
 static int	ft_numcount(int n)

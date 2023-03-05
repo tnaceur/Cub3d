@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 08:24:42 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/03 15:48:10 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/05 16:11:39 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,30 @@ int	str_2d(char **s)
 	while (s[i])
 		i++;
 	return (i);
+}
+
+void	init_textures(t_game *game)
+{
+	game->texture.img = mlx_xpm_file_to_image(game->mlx, "texture/Laava.xpm",
+			&game->texture.width, &game->texture.height);
+	game->texture.addr
+		= mlx_get_data_addr(game->texture.img, &game->texture.bits_per_pixel,
+			&game->texture.line_length, &game->texture.endian);
+	game->texture1.img = mlx_xpm_file_to_image(game->mlx, "texture/w2.xpm",
+			&game->texture1.width, &game->texture1.height);
+	game->texture1.addr
+		= mlx_get_data_addr(game->texture1.img, &game->texture1.bits_per_pixel,
+			&game->texture1.line_length, &game->texture1.endian);
+	game->texture2.img = mlx_xpm_file_to_image(game->mlx, "texture/Laava.xpm",
+			&game->texture2.width, &game->texture2.height);
+	game->texture2.addr
+		= mlx_get_data_addr(game->texture2.img, &game->texture2.bits_per_pixel,
+			&game->texture2.line_length, &game->texture2.endian);
+	game->texture3.img = mlx_xpm_file_to_image(game->mlx, "texture/w4.xpm",
+			&game->texture3.width, &game->texture3.height);
+	game->texture3.addr
+		= mlx_get_data_addr(game->texture3.img, &game->texture3.bits_per_pixel,
+			&game->texture3.line_length, &game->texture3.endian);
 }
 
 void	init_var(t_game *game, char *av)
@@ -41,6 +65,7 @@ void	init_var(t_game *game, char *av)
 	game->fov = 60 * (M_PI / 180);
 	game->p_x = 0;
 	game->p_y = 0;
+	init_textures(game);
 	game->img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
 	game->addr = mlx_get_data_addr(game->img, &game->bits_per_pixel,
 			&game->line_length, &game->endian);

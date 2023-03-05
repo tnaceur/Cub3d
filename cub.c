@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:56:13 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/04 12:52:32 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/05 15:06:04 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,6 @@ int	main(int ac, char **av)
 		exit(write(2, "Error\n", 6) - 5);
 	init_var(&game, av[1]);
 	draw_map(&game);
-	game.texture.img = mlx_xpm_file_to_image(game.mlx, "zelij.xpm", &game.texture.width, &game.texture.height);
-	game.texture.addr = mlx_get_data_addr(game.texture.img, &game.texture.bits_per_pixel, &game.texture.line_length, &game.texture.endian);
 	if (game.map[(int)(game.p_x / 40)][(int)(game.p_y / 40)] == 'N')
 		game.rot_angle = M_PI;
 	else if (game.map[(int)(game.p_x / 40)][(int)(game.p_y / 40)] == 'E')

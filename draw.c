@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 09:13:46 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/04 13:07:53 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/05 16:06:56 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,19 @@ void	draw_line(t_game *game, double angle, int color, int tall)
 		line.x2 += x_step;
 		line.y2 += y_step;
 	}
+	game->wall_hitx = line.x2;
+	game->wall_hity = line.y2;
 	game->dst = distance(game, line.x2, line.y2);
+}
+
+int get_color(t_img *tswira, int y, int x)
+{
+    int *color;
+
+	if (y >= tswira->width || y >= tswira->height || y < 0 || x < 0)
+		return (0);
+    color = (int *) (tswira->addr + (y * tswira->line_length + x * (tswira->bits_per_pixel / 8)));
+    return (*color);
 }
 
 void	d_wall_3d(t_game *game, double x, double y, double w_height)
@@ -173,6 +185,7 @@ void	d_wall_3d(t_game *game, double x, double y, double w_height)
 	int		a;
 	int		b;
 	int		color;
+	t_img	tswira;
 
 	a = 0;
 	b = 0;
@@ -189,28 +202,37 @@ void	d_wall_3d(t_game *game, double x, double y, double w_height)
 		}
 		a++;
 	}
+	int	offset_x;
+	if (game->face == 1 || game->face == 2)
+		offset_x = (int)game->wall_hity % 40;
+	else
+		offset_x = (int)game->wall_hitx % 40;
 	if (game->face == 1)
-		color = 0xff0000;
+		tswira = game->texture;
+		// color = 0xff0000;
 	else if (game->face == 2)
-		color = 0x00ffff;
+		tswira = game->texture1;
+		// color = 0x00ffff;
 	else if (game->face == 3)
-		color = 0xffff00;
+		tswira = game->texture2;
+		// color = 0xffff00;
 	else if (game->face == 4)
-		color = 0x0000ff;
+		tswira = game->texture3;
+		// color = 0x0000ff;
 	i = x;
 	if (i < 0)
 		i = 0;
-	while (i < HEIGHT && i < x + w_height)
+	double	xx;
+	xx = 0;
+	while (i < HEIGHT && i <= x + w_height)
 	{
 		j = y;
 		if (i > HEIGHT)
 			break ;
-		while (j < WIDTH && j < y + 1)
+		xx = (i - x) * ((float)tswira.height / w_height);
+		if (j < WIDTH && j <= y + 1)
 		{
-			if (my_mlx_pixel_put(game, j, i, color))
-				j++;
-			else
-				break ;
+			my_mlx_pixel_put(game, j + 1, i, get_color(&tswira, xx, offset_x));
 		}
 		i++;
 	}

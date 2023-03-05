@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:47:03 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/04 12:43:58 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/05 11:34:14 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,9 @@ typedef struct	s_img {
 
 typedef struct s_game {
 	t_img	texture;
+	t_img	texture1;
+	t_img	texture2;
+	t_img	texture3;
 	void	*mlx;
 	void	*win;
 	void	*img;
@@ -54,6 +57,8 @@ typedef struct s_game {
 	double	p_y;
 	double	dst;
 	double	ray;
+	double	wall_hitx;
+	double	wall_hity;
 	int		n_x;
 	int		n_y;
 	int		bits_per_pixel;
