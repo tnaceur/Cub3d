@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 08:24:42 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/05 16:11:39 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/05 18:58:38 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	init_textures(t_game *game)
 	game->texture1.addr
 		= mlx_get_data_addr(game->texture1.img, &game->texture1.bits_per_pixel,
 			&game->texture1.line_length, &game->texture1.endian);
-	game->texture2.img = mlx_xpm_file_to_image(game->mlx, "texture/Laava.xpm",
+	game->texture2.img = mlx_xpm_file_to_image(game->mlx, "texture/w3.xpm",
 			&game->texture2.width, &game->texture2.height);
 	game->texture2.addr
 		= mlx_get_data_addr(game->texture2.img, &game->texture2.bits_per_pixel,
