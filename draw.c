@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 09:13:46 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/05 18:57:38 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/05 19:32:56 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,34 +67,6 @@ int	wall_att(t_game *game, double x2, double y2)
 	y = floor(y2 / 40);
 	if (x > 0 && y > 0 && game->map[x] && game->map[x][y] != '1')
 		return (1);
-	// x = floor((x2 + 1) / 40);
-	// y = floor(y2 / 40);
-	// if (x >= 0 && y >= 0 && game->map[x] && game->map[x][y] == '1')
-	// {
-	// 	puts("herre");
-	// 	return (0);
-	// }
-	// x = floor(x2 / 40);
-	// y = floor((y2 + 1) / 40);
-	// if (x >= 0 && y >= 0 && game->map[x] && game->map[x][y] == '1')
-	// {
-	// 	puts("herre1");
-	// 	return (0);
-	// }
-	// x = floor((x2 - 1) / 40);
-	// y = floor(y2 / 40);
-	// if (x >= 0 && y >= 0 && game->map[x] && game->map[x][y] == '1')
-	// {
-	// 	puts("herre2");
-	// 	return (0);
-	// }
-	// x = floor(x2 / 40);
-	// y = floor((y2 - 1) / 40);
-	// if (x >= 0 && y >= 0 && game->map[x] && game->map[x][y] == '1')
-	// {
-	// 	puts("herre3");
-	// 	return (0);
-	// }
 	return (0);
 }
 
@@ -127,6 +99,29 @@ int	player_pos(t_game *game, double x2, double y2)
 	return (1);
 }
 
+int	line_loop(t_game *game, t_line *line, double *x_step, double *y_step)
+{
+	if (!wall_att(game, line->x2 + *x_step, line->y2))
+	{
+		line->x2 += *x_step;
+		if (*x_step > 0)
+			game->face = 1;
+		else
+			game->face = 2;
+		return (1);
+	}
+	if (!wall_att(game, line->x2, line->y2 + *y_step))
+	{
+		line->y2 += *y_step;
+		if (y_step > 0)
+			game->face = 3;
+		else
+			game->face = 4;
+		return (1);
+	}
+	return (0);
+}
+
 void	draw_line(t_game *game, double angle, int color, int tall)
 {
 	t_line	line;
@@ -135,31 +130,14 @@ void	draw_line(t_game *game, double angle, int color, int tall)
 
 	line.x2 = game->p_x;
 	line.y2 = game->p_y;
-	(void)tall;
 	x_step = cos(angle);
 	y_step = sin(angle);
+	(void)tall;
 	while (wall_att(game, line.x2, line.y2))
 	{
-		my_mlx_pixel_put(game, line.y2 * 0.1,
-			line.x2 * 0.1, color);
-		if (!wall_att(game, line.x2 + x_step, line.y2))
-		{
-			line.x2 += x_step;
-			if (x_step > 0)
-				game->face = 1;
-			else
-				game->face = 2;
+		my_mlx_pixel_put(game, line.y2 * 0.1, line.x2 * 0.1, color);
+		if (line_loop(game, &line, &x_step, &y_step))
 			break ;
-		}
-		if (!wall_att(game, line.x2, line.y2 + y_step))
-		{
-			line.y2 += y_step;
-			if (y_step > 0)
-				game->face = 3;
-			else
-				game->face = 4;
-			break ;
-		}
 		line.x2 += x_step;
 		line.y2 += y_step;
 	}
@@ -168,21 +146,26 @@ void	draw_line(t_game *game, double angle, int color, int tall)
 	game->dst = distance(game, line.x2, line.y2);
 }
 
-int get_color(t_img *tswira, int y, int x)
+int	get_color(t_img *tswira, int y, int x)
 {
-    int *color;
+	int	*color;
 
 	if (y >= tswira->width || y >= tswira->height || y < 0 || x < 0)
 		return (0);
-    color = (int *) (tswira->addr + (y * tswira->line_length + x * (tswira->bits_per_pixel / 8)));
-    return (*color);
+	color = (int *)(tswira->addr + (y * tswira->line_length
+				+ x * (tswira->bits_per_pixel / 8)));
+	return (*color);
 }
+
+void	floor_celling(t_game *game, int x, int y, int tall)
 
 void	d_wall_3d(t_game *game, double x, double y, double w_height)
 {
 	double	i;
+	double	xx;
 	double	j;
 	int		a;
+	int		offset_x;
 	int		b;
 	int		color;
 	t_img	tswira;
@@ -202,27 +185,21 @@ void	d_wall_3d(t_game *game, double x, double y, double w_height)
 		}
 		a++;
 	}
-	int	offset_x;
 	if (game->face == 1 || game->face == 2)
 		offset_x = (int)game->wall_hity % 40;
 	else
 		offset_x = (int)game->wall_hitx % 40;
 	if (game->face == 1)
 		tswira = game->texture;
-		// color = 0xff0000;
 	else if (game->face == 2)
 		tswira = game->texture1;
-		// color = 0x00ffff;
 	else if (game->face == 3)
 		tswira = game->texture2;
-		// color = 0xffff00;
 	else if (game->face == 4)
 		tswira = game->texture3;
-		// color = 0x0000ff;
 	i = x;
 	if (i < 0)
 		i = 0;
-	double	xx;
 	xx = 0;
 	while (i < HEIGHT && i <= x + w_height)
 	{
@@ -232,7 +209,8 @@ void	d_wall_3d(t_game *game, double x, double y, double w_height)
 		xx = (i - x) * ((float)tswira.height / w_height);
 		if (j < WIDTH && j <= y + 1)
 		{
-			my_mlx_pixel_put(game, j + 1, i, get_color(&tswira, xx, offset_x));
+			if (!my_mlx_pixel_put(game, j + 1, i, get_color(&tswira, xx, offset_x)))
+				break ;
 		}
 		i++;
 	}
