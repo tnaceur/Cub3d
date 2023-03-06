@@ -5,11 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/05 14:57:25 by tnaceur          ###   ########.fr       */
+/*   Created: 2023/03/06 09:42:15 by tnaceur           #+#    #+#             */
+/*   Updated: 2023/03/06 09:42:18 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 
 int	ft_isalpha(int c)
 {

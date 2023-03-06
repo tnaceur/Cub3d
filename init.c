@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 08:24:42 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/05 18:58:38 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/06 09:42:37 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,19 +96,4 @@ int	map_name(char *av2)
 int	ft_exit(void)
 {
 	exit(0);
-}
-
-void	put_player(t_game *game, int color)
-{
-	double	i;
-	double	j;
-
-	i = game->p_x;
-	while (i < game->p_x + 10)
-	{
-		j = game->p_y;
-		while (j < game->p_y + 10)
-			my_mlx_pixel_put(game, (j++) * 0.1, i * 0.1, color);
-		i++;
-	}
 }

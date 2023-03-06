@@ -9,6 +9,8 @@ SRCS = cub.c\
 		draw.c\
 		utils.c\
 		get_next_line.c\
+		draw_utils.c\
+		draw_utils2.c\
 
 
 OBJS = $(SRCS:%.c=%.o)
