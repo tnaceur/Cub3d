@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:22:26 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/06 09:43:16 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/06 14:35:32 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void	move_w_s(int key, t_game *game, int n_x, int n_y)
 	{
 		n_x = floor((game->p_x + 4 * cos(game->rot_angle)));
 		n_y = floor((game->p_y + 4 * sin(game->rot_angle)));
-		if (player_pos(game, n_x, n_y))
+		if (player_pos(game, n_x, n_y) && player_pos(game, n_x, game->p_y)
+			&& player_pos(game, game->p_x, n_y))
 		{
 			game->p_x += 4.0 * cos(game->rot_angle);
 			game->p_y += 4.0 * sin(game->rot_angle);
@@ -61,7 +62,8 @@ void	move_w_s(int key, t_game *game, int n_x, int n_y)
 	{
 		n_x = floor((game->p_x - 4 * cos(game->rot_angle)));
 		n_y = floor((game->p_y - 4 * sin(game->rot_angle)));
-		if (player_pos(game, n_x, n_y))
+		if ((player_pos(game, n_x, n_y) && player_pos(game, n_x, game->p_y)
+				&& player_pos(game, game->p_x, n_y)))
 		{
 			game->p_x += -4.0 * cos(game->rot_angle);
 			game->p_y += -4.0 * sin(game->rot_angle);
@@ -75,7 +77,8 @@ void	move_a_d(int key, t_game *game, int n_x, int n_y)
 	{
 		n_x = floor(game->p_x + 4 * sin(game->rot_angle));
 		n_y = floor(game->p_y - 4 * cos(game->rot_angle));
-		if (player_pos(game, n_x, n_y))
+		if ((player_pos(game, n_x, n_y) && player_pos(game, n_x, game->p_y)
+				&& player_pos(game, game->p_x, n_y)))
 		{
 			game->p_x += +4.0 * sin(game->rot_angle);
 			game->p_y += -4.0 * cos(game->rot_angle);
@@ -85,7 +88,8 @@ void	move_a_d(int key, t_game *game, int n_x, int n_y)
 	{
 		n_x = floor(game->p_x - 4 * sin(game->rot_angle));
 		n_y = floor(game->p_y + 4 * cos(game->rot_angle));
-		if (player_pos(game, n_x, n_y))
+		if ((player_pos(game, n_x, n_y) && player_pos(game, n_x, game->p_y)
+				&& player_pos(game, game->p_x, n_y)))
 		{
 			game->p_x += -4.0 * sin(game->rot_angle);
 			game->p_y += +4.0 * cos(game->rot_angle);
