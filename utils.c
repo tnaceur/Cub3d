@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 18:22:26 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/06 14:35:32 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/08 15:08:31 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,23 +26,6 @@ int	my_mlx_pixel_put(t_game *game, int x, int y, int color)
 	dst = game->addr + (y * game->line_length + x * (game->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
 	return (1);
-}
-
-void	set_color(t_game *game)
-{
-	int	i;
-	int	color;
-	int	j;
-
-	i = 0;
-	color = mlx_get_color_value(game->mlx, 1991935);
-	while (i < WIDTH)
-	{
-		j = 0;
-		while (j < HEIGHT)
-			my_mlx_pixel_put(game, i, j++, color);
-		i++;
-	}
 }
 
 void	move_w_s(int key, t_game *game, int n_x, int n_y)

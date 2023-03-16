@@ -6,15 +6,15 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:47:03 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/06 09:48:45 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/16 22:21:00 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB_H
 # define CUB_H
 
-# define WIDTH 1008
-# define HEIGHT 600
+# define WIDTH 1280
+# define HEIGHT 720
 # define KEY_W 13
 # define KEY_S 1
 # define KEY_A 0
@@ -22,7 +22,7 @@
 # define KEY_RIGHT 124
 # define KEY_LEFT 123
 
-# include "libft/libft.h"
+# include "parsing/parsing.h"
 # include <stdio.h>
 # include <mlx.h>
 # include <unistd.h>
@@ -62,7 +62,7 @@ typedef struct s_game {
 	void	*mlx;
 	void	*win;
 	void	*img;
-	void	*player;
+	void	*scy;
 	double	rot_angle;
 	double	fov;
 	double	dir;
@@ -78,16 +78,10 @@ typedef struct s_game {
 	int		line_length;
 	int		endian;
 	int		red;
-	int		black;
 	int		bl;
-	int		fd;
 	int		hieght;
-	char	*no;
-	char	*so;
-	char	*we;
-	char	*ea;
-	char	*f;
-	char	*c;
+	int		f;
+	int		c;
 	char	*addr;
 	char	**map;
 	int		face;
@@ -106,12 +100,14 @@ typedef struct s_line {
 	int		j;
 }	t_line;
 
-char	*get_next_line(int fd);
-char	**map_read(t_game *game);
-int		str_2d(char **s);
-int		map_name(char *av2);
+char	*ft_strjoin(char *s1, char *s2);
+char	**ft_split(char const *s, char c);
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+size_t	ft_strlen(const char *str);
+
+void	ft_init_textures(t_game *game, t_pdata *data);
+void	ft_init_game(t_game *game, t_pdata *data);
 int		ft_exit(void);
-void	init_var(t_game *game, char *av);
 void	draw_line(t_game *game, double angle, int color, int tall);
 void	draw_map(t_game *game);
 void	put_player(t_game *game, int color);

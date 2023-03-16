@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   ft_dup.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
+/*   By: abelkhad <abelkhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/07 15:04:08 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/02/17 09:38:27 by tnaceur          ###   ########.fr       */
+/*   Created: 2023/03/02 10:29:50 by abelkhad          #+#    #+#             */
+/*   Updated: 2023/03/02 10:29:51 by abelkhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include  "parsing.h"
 
-int	ft_strcmp(char *s1, char *s2)
+char	*ft_dup(char *str)
 {
-	size_t	i;
+	char	*ret;
+	int		i;
 
 	i = 0;
-	if (!s1 || !s2)
-		return (1);
-	while (s1[i] != '\0' || s2[i] != '\0')
+	if (!str)
+		return (NULL);
+	ret = (char *)malloc(sizeof(char) * (ft_len(str) + 1));
+	while (str[i])
 	{
-		if (s1[i] != s2[i])
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-		i ++;
+		ret[i] = str[i];
+		i++;
 	}
-	return (0);
+	ret[i] = '\0';
+	return (ret);
 }

@@ -1,26 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnaceur <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: abelkhad <abelkhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/12 02:09:19 by tnaceur           #+#    #+#             */
-/*   Updated: 2021/11/17 13:05:11 by tnaceur          ###   ########.fr       */
+/*   Created: 2023/03/02 10:31:31 by abelkhad          #+#    #+#             */
+/*   Updated: 2023/03/02 10:32:09 by abelkhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include"libft.h"
 
-char	*ft_strchr(const char *s, int c)
+#include "parsing.h"
+
+void	ft_free(char **str)
 {
 	int	i;
 
 	i = 0;
-	while (s[i] && s[i] != (char)c)
+	if (!str)
+		return ;
+	while (str[i])
 	{
-		i++ ;
+		free(str[i]);
+		str[i] = NULL;
+		i++;
 	}
-	if (s[i] == (char)c)
-		return ((char *)s + i);
-	return (0);
+	free(str);
 }

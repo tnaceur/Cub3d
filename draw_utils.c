@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 09:38:18 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/06 09:46:31 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/16 22:19:09 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	celling(t_game *game, t_3d *dr)
 {
 	dr->a = 0;
 	dr->b = 0;
-	dr->color = 0xD2DCFF;
+	dr->color = game->c;
 	while (dr->x >= 0 && dr->a < HEIGHT && dr->a < dr->x)
 	{
 		dr->b = dr->y;
@@ -44,7 +44,7 @@ void	celling(t_game *game, t_3d *dr)
 
 void	flr(t_game *game, t_3d *dr)
 {
-	dr->color = 0xffffff;
+	dr->color = game->f;
 	dr->a = dr->x + dr->w_height;
 	while (dr->a > 0 && dr->a < HEIGHT)
 	{
@@ -87,17 +87,17 @@ void	d_wall_3d(t_game *game, double x, double y, double w_height)
 
 	dr.x = x;
 	dr.y = y;
-	celling(game, &dr);
+	// celling(game, &dr);
 	if (game->face == 1 || game->face == 2)
 		dr.offset_x = (int)game->wall_hity % 40;
 	else
 		dr.offset_x = (int)game->wall_hitx % 40;
 	if (game->face == 1)
-		tswira = game->texture;
-	else if (game->face == 2)
-		tswira = game->texture1;
-	else if (game->face == 3)
 		tswira = game->texture2;
+	else if (game->face == 2)
+		tswira = game->texture;
+	else if (game->face == 3)
+		tswira = game->texture1;
 	else if (game->face == 4)
 		tswira = game->texture3;
 	dr.i = x;

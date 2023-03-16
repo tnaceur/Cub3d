@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnaceur <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: abelkhad <abelkhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 22:10:16 by tnaceur           #+#    #+#             */
-/*   Updated: 2021/11/14 17:25:31 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/06 21:29:08 by abelkhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include"libft.h"
+
+#include"cub.h"
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {

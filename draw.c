@@ -6,7 +6,7 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 09:13:46 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/06 09:45:19 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/08 12:20:24 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ void	d_wall_2d(t_game *game, int x, int y, int color)
 		b = y;
 		while (b < y + 40)
 		{
-			my_mlx_pixel_put(game, b * 0.1, a * 0.1, color);
+			if (!my_mlx_pixel_put(game, b * 0.1, a * 0.1, color))
+				break ;
 			b++;
 		}
 		a++;
@@ -101,19 +102,22 @@ void	draw_line(t_game *game, double angle, int color, int tall)
 	t_line	line;
 	double	x_step;
 	double	y_step;
+	int		i;
 
 	line.x2 = game->p_x;
 	line.y2 = game->p_y;
 	x_step = cos(angle);
 	y_step = sin(angle);
-	(void)tall;
+	i = 0;
 	while (wall_att(game, line.x2, line.y2))
 	{
-		my_mlx_pixel_put(game, line.y2 * 0.1, line.x2 * 0.1, color);
+		if (i < tall)
+			my_mlx_pixel_put(game, line.y2 * 0.1, line.x2 * 0.1, color);
 		if (line_loop(game, &line, &x_step, &y_step))
 			break ;
 		line.x2 += x_step;
 		line.y2 += y_step;
+		i++;
 	}
 	game->wall_hitx = line.x2;
 	game->wall_hity = line.y2;

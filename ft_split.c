@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
+/*   By: abelkhad <abelkhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 13:34:31 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/02/07 15:51:27 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/06 21:24:55 by abelkhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "cub.h"
 
 static int	count_words(char const *s, char c)
 {

@@ -1,21 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isspace.c                                       :+:      :+:    :+:   */
+/*   ft_check_char.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
+/*   By: abelkhad <abelkhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/07 15:03:26 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/02/07 15:03:28 by tnaceur          ###   ########.fr       */
+/*   Created: 2023/03/02 10:28:07 by abelkhad          #+#    #+#             */
+/*   Updated: 2023/03/02 10:28:10 by abelkhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "parsing.h"
 
-int	ft_isspace(int c)
+bool	ft_check_char(char *str, char c)
 {
-	if (c == '\t' || c == '\n' || c == '\v'
-		|| c == '\f' || c == '\r' || c == ' ')
-		return (1);
-	return (0);
+	int	i;
+
+	i = -1;
+	if (str && c)
+	{
+		while (str[++i])
+			if (str[i] == c)
+				return (true);
+	}
+	return (false);
 }

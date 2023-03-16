@@ -6,50 +6,11 @@
 /*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 01:56:13 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/03/05 18:57:35 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/16 22:24:59 by tnaceur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub.h"
-
-char	**map_read(t_game *game)
-{
-	char	*all_line;
-	char	**str;
-	char	*line;
-
-	if (game->fd < 0)
-		exit(write(2, "Error : Infile cannot be opened\n", 32) - 31);
-	all_line = NULL;
-	while (1)
-	{
-		line = get_next_line(game->fd);
-		if (line == NULL)
-			break ;
-		if (line[0] == 'N' && line[1] == 'O')
-			game->no = line;
-		else if (line[0] == 'S' && line[1] == 'O')
-			game->so = line;
-		else if (line[0] == 'W' && line[1] == 'E')
-			game->we = line;
-		else if (line[0] == 'E' && line[1] == 'A')
-			game->ea = line;
-		else if (line[0] == 'F')
-			game->f = line;
-		else if (line[0] == 'C')
-			game->c = line;
-		else if (line[0] == '\n' || line[0] == '\0')
-			free(line);
-		else if (line[0] == '1' || line[0] == '0' || line[0] == ' ')
-			all_line = ft_strjoin(all_line, line);
-		else
-			exit(write(2, "Error\n", 6) - 5);
-	}
-	str = ft_split(all_line, '\n');
-	free(line);
-	free(all_line);
-	return (str);
-}
 
 void	draw_rays(t_game *game, int color)
 {
@@ -66,7 +27,7 @@ void	draw_rays(t_game *game, int color)
 		ray = fmod(ray, (2 * M_PI));
 		if (ray < 0)
 			ray = (2 * M_PI) + ray;
-		draw_line(game, ray, color, INT_MAX);
+		draw_line(game, ray, color, 500);
 		corr_dst = game->dst * cos(ray - game->rot_angle);
 		dst_proj_wall = (WIDTH / 2) / tan(game->fov / 2);
 		wall_high = (40 / corr_dst) * dst_proj_wall;
@@ -78,14 +39,19 @@ void	draw_rays(t_game *game, int color)
 
 int	render(t_game *game)
 {
+	int	a;
+
 	mlx_destroy_image(game->mlx, game->img);
 	mlx_clear_window(game->mlx, game->win);
-	game->img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
+	game->img = mlx_xpm_file_to_image(game->mlx, "./texture/sr.xpm", &a, &a);
+	if (!game->img)
+		ft_put_error("game->add mlx_new_image  failed");
 	game->addr = mlx_get_data_addr(game->img, &game->bits_per_pixel,
 			&game->line_length, &game->endian);
+	if (!game->addr)
+		ft_put_error("game->add mlx_get_addr  failed");
 	draw_rays(game, game->red);
-	put_player(game, 65380);
-	draw_line(game, game->rot_angle, 65380, 100);
+	put_player(game, 1703705);
 	draw_map(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 	return (0);
@@ -114,18 +80,22 @@ int	key_press(int key, t_game *game)
 int	main(int ac, char **av)
 {
 	t_game	game;
+	t_pdata	*data;
 
-	if (ac != 2 || !map_name(av[1]))
-		exit(write(2, "Error\n", 6) - 5);
-	init_var(&game, av[1]);
+	data = (t_pdata *)malloc(sizeof(t_pdata));
+	if (!data)
+		ft_put_error("malloc faile (main)");
+	ft_init_struct(data);
+	ft_check_error(ac, av[1], data);
+	ft_init_game(&game, data);
 	draw_map(&game);
-	if (game.map[(int)(game.p_x / 40)][(int)(game.p_y / 40)] == 'N')
+	if (data->map->o == 'N')
 		game.rot_angle = M_PI;
-	else if (game.map[(int)(game.p_x / 40)][(int)(game.p_y / 40)] == 'E')
+	else if (data->map->o == 'E')
 		game.rot_angle = M_PI / 2;
-	else if (game.map[(int)(game.p_x / 40)][(int)(game.p_y / 40)] == 'S')
+	else if (data->map->o == 'S')
 		game.rot_angle = 2 * M_PI;
-	else if (game.map[(int)(game.p_x / 40)][(int)(game.p_y / 40)] == 'W')
+	else if (data->map->o == 'W')
 		game.rot_angle = 3 * M_PI / 2;
 	mlx_hook(game.win, 17, 0, ft_exit, NULL);
 	render(&game);

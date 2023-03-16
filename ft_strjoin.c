@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tnaceur <tnaceur@student.42.fr>            +#+  +:+       +#+        */
+/*   By: abelkhad <abelkhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 10:54:51 by tnaceur           #+#    #+#             */
-/*   Updated: 2023/02/13 01:54:21 by tnaceur          ###   ########.fr       */
+/*   Updated: 2023/03/06 21:25:44 by abelkhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"libft.h"
+#include"cub.h"
 
 char	*ft_strjoin(char *s1, char *s2)
 {

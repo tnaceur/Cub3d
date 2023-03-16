@@ -1,7 +1,7 @@
-NO ./Wall1.xpm 
-SO ./Wall2.xpm
-WE ./Wall3.xpm
-EA ./Wall4.xpm  
+NO ./texture/w1.xpm 
+SO ./texture/w3.xpm
+WE ./texture/w4.xpm
+EA ./texture/Laava.xpm  
 F 30,30,30    
 C 117,0,0 
 
